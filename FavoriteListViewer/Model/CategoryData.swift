@@ -31,7 +31,13 @@ class CategoryData: NSObject {
 
 //カテゴリデータモデル
 struct category: Codable {
-    let title: String   //カテゴリ名
-    let color: String   //カテゴリカラー
-    let image: String   //カテゴリアイコン
+    var title: String   //カテゴリ名
+    var color: String   //カテゴリカラー
+    var image: String   //カテゴリアイコン
+    
+    init(setTitle: String, setColor: String, setImage: String) {
+        self.title = setTitle
+        self.color = setColor
+        self.image = setImage
+    }
 }

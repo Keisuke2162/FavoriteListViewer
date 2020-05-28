@@ -10,6 +10,22 @@ import Foundation
 import UIKit
 
 extension UIColor {
+    /// ライト/ダーク用の色を受け取ってDynamic Colorを作って返す
+    public class func dynamicColor(light: UIColor, dark: UIColor) -> UIColor {
+        if #available(iOS 13, *) {
+            return UIColor { (traitCollection) -> UIColor in
+                if traitCollection.userInterfaceStyle == .dark {
+                    return dark
+                } else {
+                    return light
+                }
+            }
+        }
+        return light
+    }
+}
+
+extension UIColor {
     
     var floatValues: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         var r:CGFloat = -1, g:CGFloat = -1, b:CGFloat = -1, a:CGFloat = -1

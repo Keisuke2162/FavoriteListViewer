@@ -18,14 +18,17 @@ class TwitterAuth {
     var secret: String = ""     //シークレットキー
     
     //UserDefaultsから認証キー取得
-    func getKeys() {
+    func getKeys() -> (String, String){
         
         twitterKeyValue.register(defaults: ["tokenKey": "key"])
         twitterKeyValue.register(defaults: ["secretKey": "secret"])
         
         token = twitterKeyValue.object(forKey: "tokenKey") as! String
         secret = twitterKeyValue.object(forKey: "secretKey") as! String
+        
+        return (token, secret)
     }
+    
     //Twitter認証処理
     func authTwitter() {
         print("start Authentication")

@@ -24,6 +24,8 @@
 		E71FF47924795B010001EC06 /* CategoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71FF47824795B010001EC06 /* CategoryData.swift */; };
 		E71FF47C2479BBE90001EC06 /* ColorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71FF47B2479BBE90001EC06 /* ColorCode.swift */; };
 		E71FF47E247A41D60001EC06 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71FF47D247A41D60001EC06 /* AddCategoryViewController.swift */; };
+		E71FF480247F27B70001EC06 /* TweetMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71FF47F247F27B60001EC06 /* TweetMedia.swift */; };
+		E71FF482247F823A0001EC06 /* RealmObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71FF481247F823A0001EC06 /* RealmObject.swift */; };
 		F24359B467CDA598D0443D4B /* Pods_FavoriteListViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C92AC4294F3FF23B75A8FF /* Pods_FavoriteListViewer.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +52,8 @@
 		E71FF47824795B010001EC06 /* CategoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryData.swift; sourceTree = "<group>"; };
 		E71FF47B2479BBE90001EC06 /* ColorCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCode.swift; sourceTree = "<group>"; };
 		E71FF47D247A41D60001EC06 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
+		E71FF47F247F27B60001EC06 /* TweetMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetMedia.swift; sourceTree = "<group>"; };
+		E71FF481247F823A0001EC06 /* RealmObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +137,7 @@
 			children = (
 				E71FF46A247951BE0001EC06 /* GetLikesList.swift */,
 				E71FF472247952BB0001EC06 /* TweetDataModel.swift */,
+				E71FF481247F823A0001EC06 /* RealmObject.swift */,
 				E71FF47824795B010001EC06 /* CategoryData.swift */,
 				E71FF474247953420001EC06 /* Authentication.swift */,
 			);
@@ -143,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				E71FF46D247952130001EC06 /* TimeLineCell.swift */,
+				E71FF47F247F27B60001EC06 /* TweetMedia.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -274,11 +280,13 @@
 			files = (
 				E71FF469247951970001EC06 /* TimeLineVoewController.swift in Sources */,
 				E71FF471247952960001EC06 /* CastomClass.swift in Sources */,
+				E71FF480247F27B70001EC06 /* TweetMedia.swift in Sources */,
 				E71FF45624794C7D0001EC06 /* ViewController.swift in Sources */,
 				E71FF475247953420001EC06 /* Authentication.swift in Sources */,
 				E71FF47C2479BBE90001EC06 /* ColorCode.swift in Sources */,
 				E71FF45224794C7D0001EC06 /* AppDelegate.swift in Sources */,
 				E71FF47E247A41D60001EC06 /* AddCategoryViewController.swift in Sources */,
+				E71FF482247F823A0001EC06 /* RealmObject.swift in Sources */,
 				E71FF45424794C7D0001EC06 /* SceneDelegate.swift in Sources */,
 				E71FF473247952BB0001EC06 /* TweetDataModel.swift in Sources */,
 				E71FF466247951570001EC06 /* HomeViewController.swift in Sources */,

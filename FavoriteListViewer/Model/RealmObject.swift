@@ -31,18 +31,26 @@ class Extended_Entities: Object {
 class ManagementTweetObject: NSObject {
     
     let realm = try! Realm()
-    var realmObjects: [TweetObject] = []
+    //var realmObjects: [TweetObject] = []
     
-    func getTweetObject() {
-        realmObjects = Array(realm.objects(TweetObject.self))
+    //Realmから配列を取得
+    func getTweetObject() -> [TweetObject]{
+        let realmObjects = Array(realm.objects(TweetObject.self))
+        return realmObjects
     }
     
-    func saveTweetObject() {
-        //
+    //Realmに配列を保存
+    func saveTweetObject(saveObjects: [TweetObject]) {
+        //1レコードずつ保存していく
+        for object in saveObjects {
+            try! realm.write {
+                realm.add(object)
+            }
+        }
     }
     
     //TwitterAPIから取得した内容の中からRealmに保存されていないものをピックアップ
-    func mergeTileline(apiObjects: [TweetObject]) -> [TweetObject] {
+    func newTimeline(realmObjects: [TweetObject], apiObjects: [TweetObject]) -> [TweetObject] {
         var newObjects: [TweetObject] = []      //新規追加となる要素一覧
         //
         for apiObject in apiObjects {
@@ -67,5 +75,3 @@ class ManagementTweetObject: NSObject {
         
     }
 }
-
-

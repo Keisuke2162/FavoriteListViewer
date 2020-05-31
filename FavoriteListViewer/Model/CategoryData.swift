@@ -21,6 +21,7 @@ class CategoryData: NSObject {
         let data = encodeData.map { try! JSONDecoder().decode(category.self, from: $0)}
         return data
     }
+
     
     //[category]形式のデータを[Data]にエンコードしてUserDefaultsに保存
     func saveCategory(_ saveData: [category]) {

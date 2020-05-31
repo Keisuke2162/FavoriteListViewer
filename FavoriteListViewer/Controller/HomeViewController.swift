@@ -149,12 +149,14 @@ class HomeViewController: UIViewController {
                 auth.authTwitter()
                 keyData = auth.getKeys()
             }
+            vc.token = keyData.0
+            vc.secret = keyData.1
+            
             
             vc.backgroundColor = "1DA1F2"
             vc.iconImage = "twitter"
-            vc.token = keyData.0
-            vc.secret = keyData.1
-            vc.getLikesData()
+
+            vc.twitterLikeslistView()
             
         } else {
             vc.backgroundColor = categoryList[sender.tag].color

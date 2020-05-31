@@ -16,16 +16,49 @@ class TimelineViewController: UIViewController {
     var tableView: UITableView!     //タイムライン部
     var token: String!              //トークンID
     var secret: String!             //シークレットID
+    var favoriteObjects: [Favorite] = []        //twitterAPIから取得したデータを入れる
+    var realmTweetObjects: [TweetObject] = []   //Realmに変換したデータを入れる
+    var showTimeline: [TweetObject] = []        //表示用オブジェクト（いらない方法有りそう）
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+        
         //UI設計
         settingUI()
         
+    }
+    
+    func twitterLikeslistView() {
+        //Realmからタイムラインのデータを取得
+        let realm = ManagementTweetObject()
+        let realmObjects = realm.getTweetObject()
+        print("Realmから取得したデータ -> \(realmObjects.count)")
         
+        let timelineData = TimeLineDataSource(token: token, secret: secret)
         
+        timelineData.getTimeLine(success: { favorits in
+            
+            self.favoriteObjects = favorits
+            print("TwitterAPiから取得したデータ -> \(favorits.count)")
+            //APIから取得したデータをRealmに保存できる形に変換する
+            self.realmTweetObjects = timelineData.convertTimeline(favorites: self.favoriteObjects)
+            print("Realm型に変換したデータ -> \(self.realmTweetObjects.count)")
+            //保存済みデータと比較して未保存データに絞る
+            self.realmTweetObjects = realm.newTimeline(realmObjects: realmObjects, apiObjects: self.realmTweetObjects)
+            print("新規ツイートデータ -> \(self.realmTweetObjects.count)")
+            //新規データをRealmに保存する
+            realm.saveTweetObject(saveObjects: self.realmTweetObjects)
+            //表示用配列に新規＋既存データを格納
+            self.showTimeline = self.realmTweetObjects + realmObjects
+            print("表示するデータ数 -> \(self.showTimeline.count)")
+            
+            self.tableView.reloadData()
+            
+        }, failure: { (error) in
+            print("ERROR!")
+        })
     }
     
     func settingUI() {
@@ -61,34 +94,42 @@ class TimelineViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(TweetViewCell.self, forCellReuseIdentifier: "Cell")
+        print("表示するセルの数 -> \(showTimeline.count)")
         view.addSubview(tableView)
         
-    }
-    
-    //Twitterデータ取得
-    func getLikesData() {
-        let timelineData = TimeLineDataSource(token: token, secret: secret)
-        timelineData.getTimeLine()
     }
     
     @objc func TappedReturnButton() {
         dismiss(animated: true, completion: nil)
     }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
 }
 
 extension TimelineViewController: UITableViewDataSource, UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return showTimeline.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! TweetViewCell
-        
+        var media: String?
+        if showTimeline[indexPath.row].picImage.count != 0 {
+            media = showTimeline[indexPath.row].picImage[0].imageURL
+        }
+        cell.settingCellContent(name: showTimeline[indexPath.row].userName,
+                                id: showTimeline[indexPath.row].userID,
+                                content: showTimeline[indexPath.row].content,
+                                media: media)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 180
+        return view.frame.width + 150
     }
     
     

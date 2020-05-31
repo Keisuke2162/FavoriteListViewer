@@ -15,7 +15,7 @@ class TweetViewCell: UITableViewCell {
     private var userName: UILabel!      //ユーザ名
     private var userID: UILabel!        //ユーザID
     private var tweetContent: UILabel!  //ツイート内容
-    
+    private var mediaView: UIImageView! //画像
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -25,12 +25,15 @@ class TweetViewCell: UITableViewCell {
         userIcon.backgroundColor = .blue
         contentView.addSubview(userIcon)
         userName = UILabel()
-        userName.backgroundColor = .yellow
         contentView.addSubview(userName)
         userID = UILabel()
-        userID.backgroundColor = .red
+        userID.textColor = .gray
         contentView.addSubview(userID)
+        mediaView = UIImageView()
+        mediaView.backgroundColor = .orange
+        contentView.addSubview(mediaView)
         tweetContent = UILabel()
+        tweetContent.numberOfLines = 0
         tweetContent.backgroundColor = .orange
         contentView.addSubview(tweetContent)
         
@@ -46,6 +49,21 @@ class TweetViewCell: UITableViewCell {
         userIcon.layer.cornerRadius = 25
         userName.frame = CGRect(x: userIcon.frame.maxX + 5, y: 5, width: contentView.frame.width - userIcon.frame.maxX + 5, height: 20)
         userID.frame = CGRect(x: userIcon.frame.maxX + 5, y: 25, width: contentView.frame.width - userIcon.frame.maxX + 5, height: 20)
-        tweetContent.frame = CGRect(x: userIcon.frame.maxX + 5, y: 45, width: contentView.frame.width - userIcon.frame.maxX + 5, height: 100)
+        mediaView.frame = CGRect(x: 0, y: 60, width: contentView.frame.width, height: contentView.frame.width)
+        tweetContent.frame = CGRect(x: userIcon.frame.maxX + 5, y: mediaView.frame.maxY + 5, width: contentView.frame.width - userIcon.frame.maxX + 5, height: 100)
+        tweetContent.sizeToFit()
+    }
+    
+    func settingCellContent(name: String, id: String, content: String, media: String?) {
+        userName.text = name
+        userID.text = id
+        tweetContent.text = content
+        if let image = media {
+            mediaView.frame.size = CGSize(width: contentView.frame.width, height: contentView.frame.width)
+            mediaView.image = UIImage(url: image)
+        } else {
+            mediaView.frame.size = CGSize(width: 0, height: 0)
+        }
+        
     }
 }

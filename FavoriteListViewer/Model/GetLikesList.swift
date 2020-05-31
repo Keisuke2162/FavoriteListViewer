@@ -25,17 +25,18 @@ class TimeLineDataSource: NSObject {
     }
     
     //いいね欄を取得
-    func getTimeLine() -> [Favorite] {
+    func getTimeLine(success: @escaping ([Favorite]) -> Void,
+                     failure: @escaping (Error) -> Void) {
         
-        var favoriteList: [Favorite] = []
+        //var favoriteList: [Favorite] = []
         
         guard let url = URL(string: "https://api.twitter.com/1.1/account/settings.json") else {
             print("Get setting error")
-            return favoriteList
+            return
         }
         guard let favUrl = URL(string: "https://api.twitter.com/1.1/favorites/list.json") else {
             print("Get favorite error")
-            return favoriteList
+            return
         }
         
         let client = OAuthSwiftClient(
@@ -64,19 +65,24 @@ class TimeLineDataSource: NSObject {
                         switch favResult {
                             case .success(let favResponse):
                                 print("タイムライン取得成功")
-                                print(favResponse.data)
-                                //
-
+                                //print(favResponse.data)
+                                /*
                                 let jsonData = try? JSONSerialization.jsonObject(with: favResponse.data, options: JSONSerialization.ReadingOptions.allowFragments)
                                 print(jsonData!)
+                                */
+                                
+                                DispatchQueue.main.async {
+                                    //いいね欄のツイート情報を取得
+                                    guard let tweetData = try? JSONDecoder().decode([Favorite].self, from: favResponse.data) else {
+                                        print("タイムラインのデコードエラー")
+                                        return
+                                    }
                                     
-                                //いいね欄のツイート情報を取得
-                                guard let tweetData = try? JSONDecoder().decode([Favorite].self, from: favResponse.data) else {
-                                    print("タイムラインのデコードエラー")
-                                    return
+                                    print("タイムラインデコード成功")
+                                    success(tweetData)
+                                    
                                 }
-                                favoriteList = tweetData
-
+                                
                                 
                             case .failure:
                                 print("タイムラインの取得エラー")
@@ -88,7 +94,6 @@ class TimeLineDataSource: NSObject {
                     break
             }
         })
-        return favoriteList
     }
     
     //タイムライン情報をRealmの型に変換する

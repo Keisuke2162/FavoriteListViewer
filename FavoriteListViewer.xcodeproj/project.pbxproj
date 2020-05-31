@@ -26,6 +26,7 @@
 		E71FF47E247A41D60001EC06 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71FF47D247A41D60001EC06 /* AddCategoryViewController.swift */; };
 		E71FF480247F27B70001EC06 /* TweetMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71FF47F247F27B60001EC06 /* TweetMedia.swift */; };
 		E71FF482247F823A0001EC06 /* RealmObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71FF481247F823A0001EC06 /* RealmObject.swift */; };
+		E71FF4842482EA2E0001EC06 /* ShowTweetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71FF4832482EA2E0001EC06 /* ShowTweetModel.swift */; };
 		F24359B467CDA598D0443D4B /* Pods_FavoriteListViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C92AC4294F3FF23B75A8FF /* Pods_FavoriteListViewer.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 		E71FF47D247A41D60001EC06 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
 		E71FF47F247F27B60001EC06 /* TweetMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetMedia.swift; sourceTree = "<group>"; };
 		E71FF481247F823A0001EC06 /* RealmObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObject.swift; sourceTree = "<group>"; };
+		E71FF4832482EA2E0001EC06 /* ShowTweetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTweetModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,9 +127,9 @@
 		E71FF467247951770001EC06 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				E71FF468247951970001EC06 /* TimeLineVoewController.swift */,
 				E71FF465247951570001EC06 /* HomeViewController.swift */,
 				E71FF47D247A41D60001EC06 /* AddCategoryViewController.swift */,
-				E71FF468247951970001EC06 /* TimeLineVoewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -140,6 +142,7 @@
 				E71FF481247F823A0001EC06 /* RealmObject.swift */,
 				E71FF47824795B010001EC06 /* CategoryData.swift */,
 				E71FF474247953420001EC06 /* Authentication.swift */,
+				E71FF4832482EA2E0001EC06 /* ShowTweetModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 				E71FF47E247A41D60001EC06 /* AddCategoryViewController.swift in Sources */,
 				E71FF482247F823A0001EC06 /* RealmObject.swift in Sources */,
 				E71FF45424794C7D0001EC06 /* SceneDelegate.swift in Sources */,
+				E71FF4842482EA2E0001EC06 /* ShowTweetModel.swift in Sources */,
 				E71FF473247952BB0001EC06 /* TweetDataModel.swift in Sources */,
 				E71FF466247951570001EC06 /* HomeViewController.swift in Sources */,
 				E71FF47924795B010001EC06 /* CategoryData.swift in Sources */,

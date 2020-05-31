@@ -64,6 +64,20 @@ class TweetViewCell: UITableViewCell {
         } else {
             mediaView.frame.size = CGSize(width: 0, height: 0)
         }
-        
+    }
+    
+    var tweet: Tweet? {
+        didSet {
+            guard let tweet = tweet else { return }
+            
+            userIcon.image = tweet.icon
+            userID.text = tweet.id
+            userName.text = tweet.name
+            tweetContent.text = tweet.context
+            if tweet.images.count != 0 {
+                mediaView.image = tweet.images[0]
+            }
+            
+        }
     }
 }

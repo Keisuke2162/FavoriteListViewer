@@ -140,7 +140,7 @@ class HomeViewController: UIViewController {
         
         //LikesList（オリジナルのタイムライン取得）の場合はTwitter認証する
         if sender.tag == 9999 {
-            
+            /*
             let auth = TwitterAuth()
             var keyData = auth.getKeys()
             //取得したキーが初期値のままだったら
@@ -151,7 +151,7 @@ class HomeViewController: UIViewController {
             }
             vc.token = keyData.0
             vc.secret = keyData.1
-            
+            */
             
             vc.backgroundColor = "1DA1F2"
             vc.iconImage = "twitter"

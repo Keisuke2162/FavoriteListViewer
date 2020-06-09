@@ -42,6 +42,8 @@ class Tweet: NSObject {
 
 class TweetDataSource: NSObject {
     
+    let makeLinks = Link()                  //ツイート内容からリンクを抽出
+    
     private var tweets = [Tweet]()          //Cellに表示するデータ
     private var apiContents = [Tweet]()
     let realm = ManagementTweetObject()     //Realmデータ管理クラス
@@ -56,6 +58,7 @@ class TweetDataSource: NSObject {
             var images: [String] = []
             var movies: [String] = []
             
+            //画像URLから画像を作成
             for media in object.picImage {
                 if media.type == "photo" {
                     images.append(media.imageURL)
@@ -69,60 +72,16 @@ class TweetDataSource: NSObject {
         }
     }
     
-    //TwitterAPIからデータ取得
-    func dataGet() {
+    //TwitterAPIからデータ取得してRealmのデータと結合
+    func accountAuth() {
         
-        //Realmからデータを取得
-        let realmObjects = realm.getTweetObject()
-        
-        //UserDefaultsから認証データ取得
+        //認証情報クラス
         let auth = TwitterAuth()
-        var keyData = auth.getKeys()
+        auth.delegate = self
         
-        //未認証だったら//Twitter認証して再度UserDefaultsから取得
-        if keyData.0 == "key" || keyData.1 == "secret" {
-            //Twitter認証して再度UserDefaultsから取得
-            auth.authTwitter()
-            keyData = auth.getKeys()
-        }
-        
-        //LikesList取得
-        let timeline = TimeLineDataSource(token: keyData.0, secret: keyData.1)
-        timeline.getTimeLine(success: { favorites in
-            //[TweetObject]に変換
-            var favoriteObjects = timeline.convertTimeline(favorites: favorites)
-            
-            //新規追加データのみピックアップ
-            favoriteObjects = self.realm.newTimeline(realmObjects: realmObjects, apiObjects: favoriteObjects)
-            
-            //新規データとRealmから取得したデータをマージ
-            favoriteObjects = favoriteObjects + realmObjects
-            
-            //データをRealmに保存する
-            self.realm.saveTweetObject(saveObjects: favoriteObjects)
-            
-            //マージした配列から1件ずつtweetを作成
-            for object in favoriteObjects {
-                var images: [String] = []
-                var movies: [String] = []
-                
-                for media in object.picImage {
-                    if media.type == "photo" {
-                        images.append(media.imageURL)
-                    } else if media.type == "video" {
-                        movies.append(media.imageURL)
-                    }
-                }
-                let tweet = Tweet(icon: object.userIcon, name: object.userName,
-                                  id: object.userID, context: object.content, images: images, movies: movies)
-                self.tweets.append(tweet)
-            }
-            
-        }, failure: { (error) in
-            //タイムライン取得失敗
-            print("Error")
-        })
+        auth.getKeys()
     }
+
     
     //表示する数を返す
     func count() -> Int {
@@ -135,5 +94,71 @@ class TweetDataSource: NSObject {
             return tweets[index]
         }
         return nil
+    }
+}
+
+extension TweetDataSource: FinishAuthenticationDelegate {
+    
+    func GETLikesListData(token: String, secret: String) {
+        
+        //Realmからデータを取得
+        let realmObjects = realm.getTweetObject()
+        
+        //いいね欄の一覧を取得
+        print("タイムラインの取得を開始します　token -> \(token) secret -> \(secret)")
+        let timeline = TimeLineDataSource(token: token, secret: secret)
+        timeline.getTimeLine(success: { favorites in
+            
+            for i in favorites {
+                print("Link Search")
+                if let urls = i.entities.urls {
+                    for j in urls {
+                        print(j.expanded_url)
+                    }
+                }
+            }
+                
+            //[TweetObject]に変換
+            var favoriteObjects = timeline.convertTimeline(favorites: favorites)
+                
+            //新規追加データのみピックアップ
+            favoriteObjects = self.realm.newTimeline(realmObjects: realmObjects, apiObjects: favoriteObjects)
+                
+            //TwitterAPIにて取得したいいね欄とRealmから取得したデータをマージ
+            favoriteObjects = favoriteObjects + realmObjects
+                
+            //データをRealmに保存する
+            self.realm.saveTweetObject(saveObjects: favoriteObjects)
+                
+            //マージした配列から1件ずつtweetを作成
+            for object in favoriteObjects {
+                var images: [String] = []
+                var movies: [String] = []
+                    
+                for media in object.picImage {
+                    if media.type == "photo" {
+                        images.append(media.imageURL)
+                    } else if media.type == "video" {
+                        movies.append(media.imageURL)
+                    }
+                }
+                let tweet = Tweet(icon: object.userIcon, name: object.userName,
+                                    id: object.userID, context: object.content, images: images, movies: movies)
+                self.tweets.append(tweet)
+            }
+                
+        }, failure: { (error) in
+            //タイムライン取得失敗
+            print("Error")
+        })
+    }
+}
+
+
+class Link: NSObject {
+    func pickupLink(str: String) -> [URL] {
+        let dector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        let links = dector.matches(in: str, range: NSMakeRange(0, str.count))
+        return links.compactMap { $0.url }
     }
 }

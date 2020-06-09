@@ -9,14 +9,13 @@
 import Foundation
 import UIKit
 
-class TweetViewCell: UITableViewCell {
-    
-    private var userIcon: UIImageView!  //ユーザアイコン
-    private var userName: UILabel!      //ユーザ名
-    private var userID: UILabel!        //ユーザID
-    private var tweetContent: UILabel!  //ツイート内容
-    private var mediaView: UIImageView! //画像
-    
+class TweetViewCell: UITableViewCell, UIScrollViewDelegate {
+    private var userIcon: UIImageView!      //ユーザアイコン
+    private var userName: UILabel!          //ユーザ名
+    private var userID: UILabel!            //ユーザID
+    private var tweetContent: UILabel!      //ツイート内容
+    private var imageArea: UIScrollView!    //画像を表示する範囲
+    private var pageControl: UIPageControl! //ページ数表示
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -29,55 +28,90 @@ class TweetViewCell: UITableViewCell {
         userID = UILabel()
         userID.textColor = .gray
         contentView.addSubview(userID)
-        mediaView = UIImageView()
-        mediaView.backgroundColor = .orange
-        contentView.addSubview(mediaView)
         tweetContent = UILabel()
         tweetContent.numberOfLines = 0
-        tweetContent.backgroundColor = .orange
         contentView.addSubview(tweetContent)
-        
+        imageArea = UIScrollView()
+        imageArea.delegate = self
+        imageArea.isPagingEnabled = true
+        imageArea.showsHorizontalScrollIndicator = false
+        contentView.addSubview(imageArea)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    override func prepareForReuse() {
+        super.prepareForReuse()
         
+        if let image = imageArea {
+            for i in image.subviews {
+                i.removeFromSuperview()
+            }
+        }
+        //imageArea.removeFromSuperview()
+    }
+    
+    override func layoutSubviews() {
+        print("layoutSubviews")
         userIcon.frame = CGRect(x: 5, y: 5, width: 50, height: 50)
         userIcon.layer.cornerRadius = 25
         userName.frame = CGRect(x: userIcon.frame.maxX + 5, y: 5, width: contentView.frame.width - userIcon.frame.maxX + 5, height: 20)
         userID.frame = CGRect(x: userIcon.frame.maxX + 5, y: 25, width: contentView.frame.width - userIcon.frame.maxX + 5, height: 20)
-        mediaView.frame = CGRect(x: 0, y: 60, width: contentView.frame.width, height: contentView.frame.width)
-        tweetContent.frame = CGRect(x: userIcon.frame.maxX + 5, y: mediaView.frame.maxY + 5, width: contentView.frame.width - userIcon.frame.maxX + 5, height: 100)
+        
+        tweetContent.frame = CGRect(x: 0, y: 60, width: contentView.frame.width - userIcon.frame.maxX + 5, height: 100)
         tweetContent.sizeToFit()
-    }
+        
+        //画像があれば表示する
     
-    func settingCellContent(name: String, id: String, content: String, media: String?) {
-        userName.text = name
-        userID.text = id
-        tweetContent.text = content
-        if let image = media {
-            mediaView.frame.size = CGSize(width: contentView.frame.width, height: contentView.frame.width)
-            mediaView.image = UIImage(url: image)
-        } else {
-            mediaView.frame.size = CGSize(width: 0, height: 0)
-        }
+        if tweet!.images.count == 0 {
+             imageArea.frame = CGRect(x: 0, y: 60, width: 0, height: 0)
+             imageArea.contentSize = CGSize(width: 0, height: 0)
+         } else {
+            imageArea!.frame = CGRect(x: 0, y: tweetContent.frame.maxY + 5, width: contentView.frame.width, height: contentView.frame.width)
+            imageArea!.contentSize = CGSize(width: contentView.frame.width * CGFloat(tweet!.images.count), height: contentView.frame.width)
+            
+            
+            for i in 0 ..< tweet!.images.count {
+                let photoView = UIImageView()
+                photoView.image = tweet!.images[i]
+                photoView.frame.size = CGSize(width: contentView.frame.width, height: contentView.frame.width)
+                photoView.center = CGPoint(x: imageArea!.frame.width / 2 * CGFloat(i * 2 + 1), y: imageArea!.frame.width / 2)
+                photoView.contentMode = .scaleAspectFit
+                imageArea!.addSubview(photoView)
+            }
+         }
+        //print("imageArea width -> \(imageArea.contentSize.width)")
+        
     }
+
     
     var tweet: Tweet? {
         didSet {
             guard let tweet = tweet else { return }
             
             userIcon.image = tweet.icon
-            userID.text = tweet.id
+            userID.text = "@" + tweet.id
             userName.text = tweet.name
             tweetContent.text = tweet.context
-            if tweet.images.count != 0 {
-                mediaView.image = tweet.images[0]
+            //imageArea.contentSize = CGSize(width: 0, height: 0)
+            print("Twweet")
+            /*
+            for i in 0 ..< tweet.images.count {
+                print("setImage")
+                //let aspectScale = tweet.images[i].size.height / tweet.images[i].size.width
+                let photoView = UIImageView()
+                photoView.contentMode = .scaleAspectFit
+                photoView.image = tweet.images[i]
+                photoView.frame.size = CGSize(width: contentView.frame.width, height: contentView.frame.width)
+                photoView.center = CGPoint(x: imageArea.frame.width / 2 * CGFloat(i * 2 + 1), y: imageArea.frame.width / 2)
+                //photoView.frame = CGRect(x: imageArea.frame.width * CGFloat(i), y: 0, width: contentView.frame.width, height: contentView.frame.width)
+                
+                imageArea.addSubview(photoView)
             }
-            
+            */
+            print(tweet.context)
         }
     }
 }

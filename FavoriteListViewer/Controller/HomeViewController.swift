@@ -27,6 +27,9 @@ class HomeViewController: UIViewController {
         view.backgroundColor = .systemBackground
         getCategory()   //
         settingView()   //
+        
+        //let data = TweetDataSource()
+        //data.dataGet()
 
         // Do any additional setup after loading the view.
     }
@@ -140,23 +143,8 @@ class HomeViewController: UIViewController {
         
         //LikesList（オリジナルのタイムライン取得）の場合はTwitter認証する
         if sender.tag == 9999 {
-            /*
-            let auth = TwitterAuth()
-            var keyData = auth.getKeys()
-            //取得したキーが初期値のままだったら
-            if keyData.0 == "key" || keyData.1 == "secret" {
-                //Twitter認証
-                auth.authTwitter()
-                keyData = auth.getKeys()
-            }
-            vc.token = keyData.0
-            vc.secret = keyData.1
-            */
-            
             vc.backgroundColor = "1DA1F2"
             vc.iconImage = "twitter"
-
-            vc.twitterLikeslistView()
             
         } else {
             vc.backgroundColor = categoryList[sender.tag].color

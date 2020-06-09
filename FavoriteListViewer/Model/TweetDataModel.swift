@@ -21,6 +21,7 @@ struct TwitterSetting: Decodable {
 
 struct Favorite: Decodable {
     let created: String
+    let entities: Entities
     let id_str: String
     let text: String
     let extended_entities: Extended_entities?
@@ -28,10 +29,28 @@ struct Favorite: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case created = "created_at"
+        case entities = "entities"
         case id_str = "id_str"
         case text = "text"
         case extended_entities = "extended_entities"
         case user = "user"
+    }
+    
+    
+    struct Entities: Decodable {
+        let urls: [URLs]?
+        
+        struct URLs: Decodable {
+            let expanded_url: String
+            
+            enum CodingKeys: String, CodingKey {
+                case expanded_url = "expanded_url"
+            }
+        }
+        
+        enum CodingKeys: String, CodingKey {
+            case urls = "urls"
+        }
     }
     
     struct Extended_entities: Decodable {

@@ -26,17 +26,16 @@ class TimelineViewController: UIViewController {
         settingUI()
         
         dataSource = TweetDataSource()
+        dataSource.accountAuth()    //TwitterAPI+Realmからのデータ
+        tableView.reloadData()
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        dataSource.dataLoad()
-        tableView.reloadData()
-    }
-    
-    func twitterLikeslistView() {
+        print("viewWllappear")
+        //dataSource.dataLoad()   //Realmからデータ取得
+
     }
     
     func settingUI() {
@@ -102,6 +101,6 @@ extension TimelineViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return view.frame.width + 150
+        return 750
     }
 }

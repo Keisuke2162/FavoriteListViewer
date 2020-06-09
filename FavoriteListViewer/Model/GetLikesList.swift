@@ -66,10 +66,10 @@ class TimeLineDataSource: NSObject {
                             case .success(let favResponse):
                                 print("タイムライン取得成功")
                                 //print(favResponse.data)
-                                /*
+                                
                                 let jsonData = try? JSONSerialization.jsonObject(with: favResponse.data, options: JSONSerialization.ReadingOptions.allowFragments)
                                 print(jsonData!)
-                                */
+                                
                                 
                                 DispatchQueue.main.async {
                                     //いいね欄のツイート情報を取得
@@ -90,7 +90,7 @@ class TimeLineDataSource: NSObject {
                         }
                     })
                 case .failure:
-                    print("Twitterの設定データの変換エラー")
+                    print("Twitterの設定データの取得エラー")
                     break
             }
         })

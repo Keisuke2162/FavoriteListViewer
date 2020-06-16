@@ -145,10 +145,11 @@ class HomeViewController: UIViewController {
         if sender.tag == 9999 {
             vc.backgroundColor = "1DA1F2"
             vc.iconImage = "twitter"
-            
+            vc.isTwitterAPI = true
         } else {
             vc.backgroundColor = categoryList[sender.tag].color
             vc.iconImage = categoryList[sender.tag].image
+            vc.isTwitterAPI = false
         }
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)

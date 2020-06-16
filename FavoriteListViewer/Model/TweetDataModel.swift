@@ -6,6 +6,8 @@
 //  Copyright © 2020 Keisuke Ueda. All rights reserved.
 //
 
+//TwitterAPIの取得データモデル
+
 import Foundation
 
 //TwitterAPIからの取得データはめる

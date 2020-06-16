@@ -17,15 +17,18 @@ class TweetObject: Object {
     @objc dynamic var content: String = ""          //ツイート内容
     @objc dynamic var tweetID: String = ""          //ツイートID
     let picImage = List<Extended_Entities>()        //画像orGIFor動画一覧
+    let links = List<Links>()                       //リンク一覧
     
-    //@objc dynamic var isCategorise: Bool = false    //カテゴライズ済みかどうか
-    
-    @objc dynamic var category: String?             //カテゴリ名
+    @objc dynamic var category: String = "none"     //カテゴリ名
 }
 
 class Extended_Entities: Object {
     @objc dynamic var imageURL: String = ""
     @objc dynamic var type: String = ""
+}
+
+class Links: Object {
+    @objc dynamic var link: String = ""
 }
 
 class ManagementTweetObject: NSObject {

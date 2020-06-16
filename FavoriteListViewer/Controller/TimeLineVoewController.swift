@@ -15,6 +15,8 @@ class TimelineViewController: UIViewController {
     var iconImage: String?          //アイコン
     var tableView: UITableView!     //タイムライン部
     var dataSource: TweetDataSource!
+    var isTwitterAPI: Bool = false
+    let categoryView = CategoryViewController()
 
     
     override func viewDidLoad() {
@@ -25,9 +27,17 @@ class TimelineViewController: UIViewController {
         //UI設計
         settingUI()
         
+        
         dataSource = TweetDataSource()
-        dataSource.accountAuth()    //TwitterAPI+Realmからのデータ
-        tableView.reloadData()
+        dataSource.delegate = self          //タイムライン取得終了通知を受け取る
+        
+        //Twitterボタンから来た場合はTwitterAPIとの通信を行う
+        if isTwitterAPI {
+            
+            dataSource.accountAuth()       //TwitterAPI+Realmからのデータ
+        } else {
+            dataSource.dataLoad()
+        }
         
     }
     
@@ -93,6 +103,7 @@ extension TimelineViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! TweetViewCell
+        cell.delegate = self
         
         let tweet = dataSource.showData(at: indexPath.row)
         cell.tweet = tweet
@@ -102,5 +113,20 @@ extension TimelineViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 750
+    }
+}
+
+extension TimelineViewController: FinishToGetTimelineDelegate {
+    
+    func reloadTimeline() {
+        tableView.reloadData()
+    }
+}
+
+extension TimelineViewController: CellSelectedDelegate {
+    func categoryViewButtonDelegate() {
+        
+        let vc = CategoryViewController()
+        present(vc, animated: true, completion: nil)
     }
 }
